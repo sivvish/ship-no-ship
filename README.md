@@ -6,7 +6,7 @@ Code review bots comment. This decides. The decision is the product.
 
 Repo: https://github.com/sivvish/ship-no-ship
 
-There is no permanent public host yet. A session tunnel is fine for a demo. Do not treat a loca.lt URL as the product.
+There is no permanent public host yet. Local uvicorn is the way to run it.
 
 ## The problem
 
@@ -59,17 +59,20 @@ Users who come back. A check-run on the PR. Earned autonomy after a class of cha
 
 ## Run
 
-`GITHUB_TOKEN` is required. `TYPESAFE_API_KEY` is optional. Without it, Jev is skipped and the deterministic verdict stands.
+`GITHUB_TOKEN` is required. `TYPESAFE_API_KEY` is optional. Without it, Jev is skipped and the deterministic verdict stands. That is the intended failure mode, not a crash.
 
 ```
 python -m pip install -r requirements.txt
 cp .env.example .env
-python -m uvicorn app.main:app --reload
+python -m uvicorn app.main:app --reload --host 127.0.0.1 --port 8000
+```
+
+Open http://127.0.0.1:8000. Stop with Ctrl+C. Do not leave uvicorn running after you are done. Do not leave a tunnel (loca.lt, ngrok, cloudflared) running either. A tunnel is an optional demo only and is not the product. Do not put a tunnel URL in this README.
+
+```
 python -m pytest
 python -m eval.run
 ```
-
-Without `TYPESAFE_API_KEY` the judge is skipped and the deterministic verdict stands. That is the intended failure mode, not a crash.
 
 Public GitHub only. Do not point this at employer repos.
 
