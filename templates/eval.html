@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% block title %}Eval · Ship/no-ship{% endblock %}
+{% block body %}
+<h1>Holdout</h1>
+{% if not data %}
+<p>No eval run yet. <code>python -m eval.run</code> writes <code>eval/last.json</code>.</p>
+{% else %}
+<p class="lede">n={{ data.n }} holdout. Exact verdict match {{ data.exact_match }} / {{ data.n }} ({{ data.exact_match_pct }}). Numbers are directional. This set is small on purpose.</p>
+<table>
+  <thead>
+    <tr><th>Metric</th><th>Value</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>Missed Block (gold Block, system not Block)</td><td>{{ data.missed_block }} / {{ data.gold_block_n }}</td></tr>
+    <tr><td>False Block (gold Ship, system Block)</td><td>{{ data.false_block }} / {{ data.gold_ship_n }}</td></tr>
+    <tr><td>Dated</td><td>{{ data.when }}</td></tr>
+    <tr><td>LLM used</td><td>{{ data.llm_used }}</td></tr>
+  </tbody>
+</table>
+<h2>Rows</h2>
+<table>
+  <thead>
+    <tr><th>PR</th><th>Gold</th><th>System</th><th>Match</th></tr>
+  </thead>
+  <tbody>
+    {% for r in data.rows %}
+    <tr>
+      <td><a href="{{ r.html_url }}">{{ r.key }}</a></td>
+      <td>{{ r.gold_verdict }} / {{ r.gold_clause }}</td>
+      <td>{{ r.system_verdict }} / {{ r.system_clause }}</td>
+      <td>{% if r.match %}yes{% else %}<span class="miss">no</span>{% endif %}</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endif %}
+{% endblock %}

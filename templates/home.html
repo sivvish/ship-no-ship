@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block body %}
+<h1>May this land?</h1>
+<p class="lede">Paste a public GitHub pull request. Get Ship, Changes, or Block. The decision is the product. Comments are not.</p>
+
+{% if error %}
+<p class="error">{{ error }}</p>
+{% endif %}
+
+<form action="/review" method="post">
+  <label for="url">Pull request URL</label>
+  <div class="row">
+    <input id="url" name="url" type="url" required placeholder="https://github.com/owner/repo/pull/123" autocomplete="off">
+    <button type="submit">Decide</button>
+  </div>
+</form>
+
+{% if examples %}
+<p class="hint">Or open a labeled example:</p>
+<ul class="plain">
+  {% for e in examples %}
+  <li><a href="/examples#{{ e.id }}">{{ e.verdict }} · {{ e.key }}</a></li>
+  {% endfor %}
+</ul>
+{% endif %}
+{% endblock %}

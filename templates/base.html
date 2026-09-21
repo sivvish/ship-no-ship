@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}Ship/no-ship{% endblock %}</title>
+  <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+  <header class="wrap">
+    <a class="mark" href="/">Ship/no-ship</a>
+    <nav>
+      <a href="/policy">Policy</a>
+      <a href="/examples">Examples</a>
+      <a href="/eval">Eval</a>
+    </nav>
+  </header>
+  <main class="wrap">
+    {% block body %}{% endblock %}
+  </main>
+  <footer class="wrap">
+    <p>A merge bar for agent-written pull requests. Not a review bot. Public GitHub only.</p>
+  </footer>
+</body>
+</html>

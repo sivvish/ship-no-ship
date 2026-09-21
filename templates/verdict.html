@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% block title %}{{ d.verdict }} · Ship/no-ship{% endblock %}
+{% block body %}
+<p class="kicker"><a href="{{ d.pr.html_url }}">{{ d.pr.key }}</a> · {{ d.pr.user }} · {{ d.when }}</p>
+<p class="verdict verdict-{{ d.verdict | lower }}">{{ d.verdict }}</p>
+<p class="clause">{{ d.clause }} · {{ d.detail }}</p>
+<p class="lede">{{ d.pr.title }}</p>
+
+{% if d.to_ship %}
+<h2>What would have to be true to ship</h2>
+<ul>
+  {% for item in d.to_ship %}
+  <li>{{ item }}</li>
+  {% endfor %}
+</ul>
+{% endif %}
+
+<p class="risk">{{ d.risk_line }}</p>
+
+<h2>Gates</h2>
+<table>
+  <thead>
+    <tr><th>Clause</th><th>Observed</th><th>Source</th></tr>
+  </thead>
+  <tbody>
+    {% for r in d.rows %}
+    <tr>
+      <td><code>{{ r.clause }}</code></td>
+      <td>{{ r.detail }}{% if r.evidence %}<br><span class="muted">{{ r.evidence }}</span>{% endif %}</td>
+      <td>{{ r.source }}</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+<h2>Signals</h2>
+<ul class="plain">
+  <li>Agent: {% if d.agent.detected %}{{ d.agent.names | join(", ") }}{% else %}not detected{% endif %} (login {{ d.agent.login }})</li>
+  <li>CI: ran={{ d.ci.ran }} green={{ d.ci.green }} failed={{ d.ci.failed | join(", ") or "none" }}</li>
+  <li>Size: {{ d.size.files }} files, {{ d.size.changed_lines }} changed lines</li>
+  <li>Judge: {% if d.llm and d.llm.skipped %}skipped ({{ d.llm.reason }}){% elif d.llm and d.llm.ok %}{{ d.model }}{% elif d.llm %}failed ({{ d.llm.error or d.llm.reason }}){% else %}not called{% endif %}{% if d.truncated %} · diff truncated{% endif %}</li>
+</ul>
+{% endblock %}

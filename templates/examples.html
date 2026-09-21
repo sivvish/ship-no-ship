@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block title %}Examples · Ship/no-ship{% endblock %}
+{% block body %}
+<h1>Labeled examples</h1>
+<p class="lede">Gold label is a human applying the policy to the pull request. System is what the code decided. A miss is the interesting row.</p>
+
+{% for e in items %}
+<article class="card" id="{{ e.id }}">
+  <p class="kicker"><a href="{{ e.html_url }}">{{ e.key }}</a> · {{ e.agent }} · {{ e.split }}</p>
+  <p>
+    <span class="verdict-inline verdict-{{ e.gold_verdict | lower }}">Gold {{ e.gold_verdict }}</span>
+    <span class="verdict-inline verdict-{{ e.system_verdict | lower }}">System {{ e.system_verdict }}</span>
+    {% if e.gold_verdict != e.system_verdict %}
+    <span class="miss">miss</span>
+    {% endif %}
+  </p>
+  <p>{{ e.title }}</p>
+  <p class="muted">Gold clause {{ e.gold_clause }}. System clause {{ e.system_clause }}. {{ e.notes }}</p>
+</article>
+{% endfor %}
+{% endblock %}

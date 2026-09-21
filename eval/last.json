@@ -1,0 +1,113 @@
+{
+  "n": 10,
+  "exact_match": 8,
+  "exact_match_pct": "80%",
+  "gold_block_n": 5,
+  "missed_block": 0,
+  "gold_ship_n": 2,
+  "false_block": 0,
+  "when": "2026-09-21 14:32 UTC",
+  "llm_used": false,
+  "rows": [
+    {
+      "key": "apache/flink-connector-kafka#300",
+      "html_url": "https://github.com/apache/flink-connector-kafka/pull/300",
+      "gold_verdict": "Ship",
+      "gold_clause": "SHIP",
+      "system_verdict": "Ship",
+      "system_clause": "SHIP",
+      "match": true,
+      "split": "holdout"
+    },
+    {
+      "key": "hashicorp/terraform-provider-azurerm#33463",
+      "html_url": "https://github.com/hashicorp/terraform-provider-azurerm/pull/33463",
+      "gold_verdict": "Ship",
+      "gold_clause": "SHIP",
+      "system_verdict": "Ship",
+      "system_clause": "SHIP",
+      "match": true,
+      "split": "holdout"
+    },
+    {
+      "key": "dsrackler17/EdgeDeskSports#317",
+      "html_url": "https://github.com/dsrackler17/EdgeDeskSports/pull/317",
+      "gold_verdict": "Block",
+      "gold_clause": "BLOCK_CI_FAILED",
+      "system_verdict": "Block",
+      "system_clause": "BLOCK_CI_FAILED",
+      "match": true,
+      "split": "holdout"
+    },
+    {
+      "key": "elastic/docs-builder#4141",
+      "html_url": "https://github.com/elastic/docs-builder/pull/4141",
+      "gold_verdict": "Block",
+      "gold_clause": "BLOCK_CI_FAILED",
+      "system_verdict": "Block",
+      "system_clause": "BLOCK_CI_FAILED",
+      "match": true,
+      "split": "holdout"
+    },
+    {
+      "key": "kaleidoswap/kaleido-ui#96",
+      "html_url": "https://github.com/kaleidoswap/kaleido-ui/pull/96",
+      "gold_verdict": "Block",
+      "gold_clause": "BLOCK_NO_CI_APP",
+      "system_verdict": "Block",
+      "system_clause": "BLOCK_NO_CI_APP",
+      "match": true,
+      "split": "holdout"
+    },
+    {
+      "key": "apache/doris#68180",
+      "html_url": "https://github.com/apache/doris/pull/68180",
+      "gold_verdict": "Changes",
+      "gold_clause": "CHANGES_TOO_LARGE",
+      "system_verdict": "Changes",
+      "system_clause": "CHANGES_TOO_LARGE",
+      "match": true,
+      "split": "holdout"
+    },
+    {
+      "key": "PostHog/posthog#103790",
+      "html_url": "https://github.com/PostHog/posthog/pull/103790",
+      "gold_verdict": "Block",
+      "gold_clause": "BLOCK_SENSITIVE_NO_TESTS",
+      "system_verdict": "Block",
+      "system_clause": "BLOCK_SENSITIVE_NO_TESTS",
+      "match": true,
+      "split": "holdout"
+    },
+    {
+      "key": "canact/canact#263",
+      "html_url": "https://github.com/canact/canact/pull/263",
+      "gold_verdict": "Block",
+      "gold_clause": "BLOCK_SENSITIVE_NO_TESTS",
+      "system_verdict": "Block",
+      "system_clause": "BLOCK_SENSITIVE_NO_TESTS",
+      "match": true,
+      "split": "holdout"
+    },
+    {
+      "key": "Giuig/tvninja#21",
+      "html_url": "https://github.com/Giuig/tvninja/pull/21",
+      "gold_verdict": "Changes",
+      "gold_clause": "CHANGES_LOGIC_NO_TESTS",
+      "system_verdict": "Block",
+      "system_clause": "BLOCK_DESTRUCTIVE",
+      "match": false,
+      "split": "holdout"
+    },
+    {
+      "key": "MetaMask/metamask-mobile#36477",
+      "html_url": "https://github.com/MetaMask/metamask-mobile/pull/36477",
+      "gold_verdict": "Changes",
+      "gold_clause": "CHANGES_LOGIC_NO_TESTS",
+      "system_verdict": "Block",
+      "system_clause": "BLOCK_FALSE_VERIFICATION",
+      "match": false,
+      "split": "holdout"
+    }
+  ]
+}
