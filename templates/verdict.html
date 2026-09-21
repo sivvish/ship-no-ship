@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% block title %}{{ d.verdict }} · Ship/no-ship{% endblock %}
+{% block mainclass %}page-verdict{% endblock %}
 {% block body %}
 <p class="kicker"><a href="{{ d.pr.html_url }}">{{ d.pr.key }}</a> · {{ d.pr.user }} · {{ d.when }}</p>
 <p class="verdict verdict-{{ d.verdict | lower }}">{{ d.verdict }}</p>

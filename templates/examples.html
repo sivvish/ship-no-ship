@@ -1,21 +1,60 @@
 {% extends "base.html" %}
 {% block title %}Examples · Ship/no-ship{% endblock %}
+{% block mainclass %}page-examples{% endblock %}
 {% block body %}
 <h1>Labeled examples</h1>
-<p class="lede">Gold label is a human applying the policy to the pull request. System is what the code decided. A miss is the interesting row.</p>
+<p class="lede">A person and the code both apply the same published policy to real public pull requests. Disagreement is the useful row.</p>
 
+{% set ns = namespace(misses=0) %}
 {% for e in items %}
-<article class="card" id="{{ e.id }}">
-  <p class="kicker"><a href="{{ e.html_url }}">{{ e.key }}</a> · {{ e.agent }} · {{ e.split }}</p>
-  <p>
-    <span class="verdict-inline verdict-{{ e.gold_verdict | lower }}">Gold {{ e.gold_verdict }}</span>
-    <span class="verdict-inline verdict-{{ e.system_verdict | lower }}">System {{ e.system_verdict }}</span>
-    {% if e.gold_verdict != e.system_verdict %}
-    <span class="miss">miss</span>
-    {% endif %}
-  </p>
-  <p>{{ e.title }}</p>
-  <p class="muted">Gold clause {{ e.gold_clause }}. System clause {{ e.system_clause }}. {{ e.notes }}</p>
-</article>
+  {% if e.gold_verdict != e.system_verdict %}
+    {% set ns.misses = ns.misses + 1 %}
+  {% endif %}
 {% endfor %}
+
+<div class="key" aria-label="How to read this page">
+  <div>
+    <strong>Gold</strong>
+    <p>A person applied the policy to this PR.</p>
+  </div>
+  <div>
+    <strong>System</strong>
+    <p>What the code decided on the same PR.</p>
+  </div>
+  <div>
+    <strong>Miss</strong>
+    <p>They disagree. {{ ns.misses }} of {{ items | length }} below.</p>
+  </div>
+</div>
+
+<div class="ex-table" role="table" aria-label="Labeled examples">
+  <div class="ex-row ex-head" role="row">
+    <div role="columnheader">Pull request</div>
+    <div role="columnheader">Gold</div>
+    <div role="columnheader">System</div>
+    <div role="columnheader">Why</div>
+  </div>
+  {% for e in items %}
+  <article class="ex-row{% if e.gold_verdict != e.system_verdict %} is-miss{% endif %}" id="{{ e.id }}" role="row">
+    <div role="cell">
+      <p class="kicker"><a href="{{ e.html_url }}">{{ e.key }}</a> · {{ e.agent }} · {{ e.split }}</p>
+      <p>{{ e.title }}</p>
+    </div>
+    <div role="cell">
+      <span class="verdict-inline verdict-{{ e.gold_verdict | lower }}">{{ e.gold_verdict }}</span>
+      <p class="kicker"><code>{{ e.gold_clause }}</code></p>
+    </div>
+    <div role="cell">
+      <span class="verdict-inline verdict-{{ e.system_verdict | lower }}">{{ e.system_verdict }}</span>
+      <p class="kicker"><code>{{ e.system_clause }}</code></p>
+      {% if e.gold_verdict != e.system_verdict %}
+      <p class="miss">miss</p>
+      {% endif %}
+    </div>
+    <div role="cell">
+      <p>{{ e.notes }}</p>
+    </div>
+  </article>
+  {% endfor %}
+</div>
 {% endblock %}

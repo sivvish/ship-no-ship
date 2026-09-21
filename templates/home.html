@@ -1,26 +1,58 @@
 {% extends "base.html" %}
+{% block title %}Ship/no-ship{% endblock %}
+{% block mainclass %}page-home{% endblock %}
 {% block body %}
 <h1>May this land?</h1>
-<p class="lede">Paste a public GitHub pull request. Get Ship, Changes, or Block. The decision is the product. Comments are not.</p>
+<p class="lede">Agents open pull requests. Review bots leave comments. This publishes the merge bar: Ship, Changes or Block.</p>
 
-{% if error %}
-<p class="error">{{ error }}</p>
-{% endif %}
-
-<form action="/review" method="post">
-  <label for="url">Pull request URL</label>
-  <div class="row">
-    <input id="url" name="url" type="url" required placeholder="https://github.com/owner/repo/pull/123" autocomplete="off">
-    <button type="submit">Decide</button>
+<div class="split">
+  <div>
+    {% if error %}
+    <p class="error" role="alert">{{ error }}</p>
+    {% endif %}
+    <form action="/review" method="post">
+      <label for="url">Public GitHub pull request URL</label>
+      <p class="hint" id="url-hint">Public GitHub only. Not a review bot. You get a merge decision.</p>
+      <div class="row">
+        <input id="url" name="url" type="url" required placeholder="https://github.com/owner/repo/pull/123" autocomplete="off" aria-describedby="url-hint">
+        <button type="submit">Decide</button>
+      </div>
+    </form>
   </div>
-</form>
+  <aside class="legend" aria-label="What the three words mean">
+    <h2>What the words mean</h2>
+    <dl>
+      <div>
+        <dt class="verdict-inline verdict-ship">Ship</dt>
+        <dd>May land as-is.</dd>
+      </div>
+      <div>
+        <dt class="verdict-inline verdict-changes">Changes</dt>
+        <dd>May land after a listed fix.</dd>
+      </div>
+      <div>
+        <dt class="verdict-inline verdict-block">Block</dt>
+        <dd>Must not land.</dd>
+      </div>
+    </dl>
+    <p class="hint"><a href="/policy">Read the full policy</a></p>
+  </aside>
+</div>
 
 {% if examples %}
-<p class="hint">Or open a labeled example:</p>
-<ul class="plain">
+<h2>Try a labeled example</h2>
+<p class="hint">These are real public PRs. Gold is a person. System is the code. A miss is useful.</p>
+<div class="cards">
   {% for e in examples %}
-  <li><a href="/examples#{{ e.id }}">{{ e.gold_verdict }} · {{ e.key }}</a></li>
+  <a class="card-link" href="/examples#{{ e.id }}">
+    <span class="verdict-inline verdict-{{ e.gold_verdict | lower }}">{{ e.gold_verdict }}</span>
+    {% if e.gold_verdict != e.system_verdict %}
+    <span class="miss">miss</span>
+    {% endif %}
+    <p class="kicker">{{ e.key }}</p>
+    <p>{{ e.notes }}</p>
+  </a>
   {% endfor %}
-</ul>
+</div>
 {% endif %}
 {% endblock %}

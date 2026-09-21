@@ -1,5 +1,10 @@
 # Changelog
 
+## 2026-09-21 (UI)
+
+- Home, examples and eval use a 1080px chrome. Primer copy, outcome legend, example cards, holdout figures.
+- Policy stays the raw POLICY.md. Verdict stays verdict-first.
+
 ## 2026-09-21 (later)
 
 - Semantic judge is Jev (`jev-latest` via `POST /v1/systemone`), not Anthropic.
