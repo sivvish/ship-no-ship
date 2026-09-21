@@ -21,63 +21,11 @@ ROOT = Path(__file__).resolve().parent.parent
 RUNS = ROOT / "eval" / "runs"
 EXAMPLES = ROOT / "examples"
 POLICY_MD = ROOT / "POLICY.md"
-GOLD = ROOT / "eval" / "gold.jsonl"
-HOLDOUT = ROOT / "eval" / "holdout_ids.txt"
 LAST_EVAL = ROOT / "eval" / "last.json"
 
 app = FastAPI(title="Ship/no-ship")
 app.mount("/static", StaticFiles(directory=str(ROOT / "static")), name="static")
 templates = Jinja2Templates(directory=str(ROOT / "templates"))
-
-
-def _policy_html() -> str:
-    text = POLICY_MD.read_text(encoding="utf-8")
-    # Tiny markdown: headings, lists, code, hr. Enough for POLICY.md.
-    lines = text.splitlines()
-    out: list[str] = []
-    in_code = False
-    for line in lines:
-        if line.startswith("```"):
-            if in_code:
-                out.append("</code></pre>")
-                in_code = False
-            else:
-                out.append("<pre><code>")
-                in_code = True
-            continue
-        if in_code:
-            out.append(line.replace("&", "&amp;").replace("<", "&lt;") + "\n")
-            continue
-        if line.startswith("# "):
-            out.append(f"<h1>{line[2:]}</h1>")
-        elif line.startswith("## "):
-            out.append(f"<h2>{line[3:]}</h2>")
-        elif line.startswith("### "):
-            out.append(f"<h3>{line[4:]}</h3>")
-        elif line.strip() == "---":
-            out.append("<hr>")
-        elif line.startswith("- "):
-            out.append(f"<li>{_inline(line[2:])}</li>")
-        elif line.strip() == "":
-            out.append("")
-        else:
-            out.append(f"<p>{_inline(line)}</p>")
-    html = "\n".join(out)
-    # wrap consecutive <li>
-    while "<li>" in html:
-        html = html.replace("<li>", "<ul><li>", 1)
-        break
-    return html
-
-
-def _inline(text: str) -> str:
-    escaped = text.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")
-    # **bold**
-    import re
-
-    escaped = re.sub(r"`([^`]+)`", r"<code>\1</code>", escaped)
-    escaped = re.sub(r"\*\*([^*]+)\*\*", r"<strong>\1</strong>", escaped)
-    return escaped
 
 
 def _html(request: Request, name: str, context: dict, status_code: int = 200):

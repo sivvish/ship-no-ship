@@ -4,7 +4,9 @@ Paste a public GitHub pull request. Get **Ship**, **Changes**, or **Block**.
 
 Code review bots comment. This decides. The decision is the product.
 
-Live: see the repo description once deployed. Run locally with `uvicorn app.main:app --reload`.
+Repo: https://github.com/sivvish/ship-no-ship
+
+There is no permanent public host yet. A session tunnel is fine for a demo. Do not treat a loca.lt URL as the product.
 
 ## The problem
 
@@ -23,7 +25,7 @@ Deterministic gates first. An LLM only on intent and blast radius, and never to 
 - Large: 30 files or 800 changed lines.
 - Failed CI is always a Block.
 - Application code with no checks is a Block.
-- Sensitive paths (auth, payments, migrations, prod infra, lockfiles, workflows) with no test file are a Block.
+- Sensitive paths (auth, payments, migrations, prod infra, lockfiles and workflows) with no test file are a Block.
 
 ## Eval (holdout, n=10)
 
@@ -57,9 +59,11 @@ Users who come back. A check-run on the PR. Earned autonomy after a class of cha
 
 ## Run
 
+`GITHUB_TOKEN` is required. `ANTHROPIC_API_KEY` is optional.
+
 ```
 python -m pip install -r requirements.txt
-cp .env.example .env   # GITHUB_TOKEN required. ANTHROPIC_API_KEY optional.
+cp .env.example .env
 python -m uvicorn app.main:app --reload
 python -m pytest
 python -m eval.run
