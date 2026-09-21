@@ -1,5 +1,11 @@
 # Changelog
 
+## 2026-09-21 (later)
+
+- Semantic judge is Jev (`jev-latest` via `POST /v1/systemone`), not Anthropic.
+- Typed nouls for intent and blast radius. Compose in code. Thresholds 0.6. Cannot Block. Cannot upgrade Changes.
+- Holdout numbers stay the deterministic run. Do not retune them against Jev.
+
 ## 2026-09-21
 
 - v0: public URL in, Ship / Changes / Block out.

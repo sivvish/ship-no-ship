@@ -233,8 +233,8 @@ def merge_llm(
             extra = GateHit(
                 clause=llm_clause if llm_clause in {"CHANGES_INTENT", "CHANGES_BLAST_RADIUS"} else "CHANGES_INTENT",
                 verdict="Changes",
-                detail=llm.get("detail") or "LLM downgraded Ship to Changes.",
-                source="llm",
+                detail=llm.get("detail") or "Jev downgraded Ship to Changes.",
+                source="jev",
                 evidence=llm.get("evidence") or "",
             )
             hits = [extra] + hits

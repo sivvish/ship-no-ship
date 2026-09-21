@@ -101,19 +101,31 @@ Agent attribution is present and blast radius is unclear. Same LLM limits as `CH
 No Block or Changes gate fired.
 
 - Checks on head are green, **or** the diff is docs/comments/tests-only.
-- Intent matches the diff (or the LLM was skipped / failed, in which case the deterministic verdict stands).
+- Intent matches the diff (or Jev was skipped / failed, in which case the deterministic verdict stands).
 
 ---
 
-## What the LLM is allowed to do
+## What Jev is allowed to do
 
-One structured call, and only if the deterministic verdict is not Block:
+One TypeSafe System One call (`jev-latest`) and only if the deterministic verdict is not Block. Jev returns typed nouls, not a free-text verdict.
 
-1. Intent vs diff, with evidence quotes.
-2. Did the agent actually verify, or only claim it?
-3. Blast radius, and what would have to be true to ship.
+Questions:
 
-It may not invent a fourth verdict. It may not override a deterministic Block. It may not override a deterministic Changes to Ship. If JSON fails, show the deterministic verdict and say the judge failed.
+- `intent_match` (noul): title/body describe the actual diff.
+- `blast_clear` (noul): scope and failure mode are clear.
+- `verification` (choice: verified / claimed / unclear): informational. It does not change the verdict.
+
+Composition in `app/judge.py` `compose()`:
+
+- Never Block. Never upgrade Changes to Ship.
+- Stay Ship only if `intent_match >= 0.6`.
+- If an agent is detected, also require `blast_clear >= 0.6`.
+- Otherwise `CHANGES_INTENT` or `CHANGES_BLAST_RADIUS`.
+- A noul near 0.5 means "don't know." Uncertain does not Ship.
+
+If the call fails or `TYPESAFE_API_KEY` is missing, show the deterministic verdict and say the judge was skipped.
+
+Thresholds were picked as a conservative start (0.6). Recalibrate on the 30-dev gold rows. Do not tune on holdout.
 
 ---
 

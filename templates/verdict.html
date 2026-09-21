@@ -38,6 +38,6 @@
   <li>Agent: {% if d.agent.detected %}{{ d.agent.names | join(", ") }}{% else %}not detected{% endif %} (login {{ d.agent.login }})</li>
   <li>CI: ran={{ d.ci.ran }} green={{ d.ci.green }} failed={{ d.ci.failed | join(", ") or "none" }}</li>
   <li>Size: {{ d.size.files }} files, {{ d.size.changed_lines }} changed lines</li>
-  <li>Judge: {% if d.llm and d.llm.skipped %}skipped ({{ d.llm.reason }}){% elif d.llm and d.llm.ok %}{{ d.model }}{% elif d.llm %}failed ({{ d.llm.error or d.llm.reason }}){% else %}not called{% endif %}{% if d.truncated %} · diff truncated{% endif %}</li>
+  <li>Judge: {% if d.llm and d.llm.skipped %}skipped ({{ d.llm.reason }}){% elif d.llm and d.llm.ok %}{{ d.model }} · intent {{ d.llm.intent_noul }} · blast {{ d.llm.blast_noul }}{% if d.llm.verified_or_claimed %} · verification {{ d.llm.verified_or_claimed }}{% endif %}{% elif d.llm %}failed ({{ d.llm.error or d.llm.reason }}){% else %}not called{% endif %}{% if d.truncated %} · diff truncated{% endif %}</li>
 </ul>
 {% endblock %}

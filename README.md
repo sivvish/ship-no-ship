@@ -16,7 +16,7 @@ This is that bar. It is not a 0–5 score. It is not the ServiceNow peer-review 
 
 ## The bet
 
-Deterministic gates first. An LLM only on intent and blast radius, and never to override a Block. If the model does all the work this is a wrapper.
+Deterministic gates first. Jev (TypeSafe System One) only on intent and blast radius, as typed nouls, and never to override a Block. If a chat model writes the verdict this is a wrapper.
 
 ## Policy
 
@@ -29,7 +29,7 @@ Deterministic gates first. An LLM only on intent and blast radius, and never to 
 
 ## Eval (holdout, n=10)
 
-Labeled 40 public agent PRs by walking POLICY.md against the files, checks and body. 10 were frozen as holdout before looking at misses as a tuning signal. The run is deterministic (no LLM). Dated 2026-09-21.
+Labeled 40 public agent PRs by walking POLICY.md against the files, checks and body. 10 were frozen as holdout before looking at misses as a tuning signal. The published holdout run is deterministic (no Jev). Dated 2026-09-21. Jev is a live overlay on non-Block verdicts. Do not retune holdout against it.
 
 | Metric | Value |
 |---|---|
@@ -59,7 +59,7 @@ Users who come back. A check-run on the PR. Earned autonomy after a class of cha
 
 ## Run
 
-`GITHUB_TOKEN` is required. `ANTHROPIC_API_KEY` is optional.
+`GITHUB_TOKEN` is required. `TYPESAFE_API_KEY` is optional. Without it, Jev is skipped and the deterministic verdict stands.
 
 ```
 python -m pip install -r requirements.txt
@@ -69,7 +69,7 @@ python -m pytest
 python -m eval.run
 ```
 
-Without `ANTHROPIC_API_KEY` the judge is skipped and the deterministic verdict stands. That is the intended failure mode, not a crash.
+Without `TYPESAFE_API_KEY` the judge is skipped and the deterministic verdict stands. That is the intended failure mode, not a crash.
 
 Public GitHub only. Do not point this at employer repos.
 
