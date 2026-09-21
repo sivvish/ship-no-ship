@@ -80,6 +80,10 @@ def _inline(text: str) -> str:
     return escaped
 
 
+def _html(request: Request, name: str, context: dict, status_code: int = 200):
+    return templates.TemplateResponse(request, name, context, status_code=status_code)
+
+
 def _save_run(run_id: str, payload: dict) -> None:
     RUNS.mkdir(parents=True, exist_ok=True)
     path = RUNS / f"{run_id}.json"
@@ -129,10 +133,7 @@ def home(request: Request):
     index = EXAMPLES / "index.json"
     if index.exists():
         examples = json.loads(index.read_text(encoding="utf-8"))[:3]
-    return templates.TemplateResponse(
-        "home.html",
-        {"request": request, "examples": examples, "error": None},
-    )
+    return _html(request, "home.html", {"examples": examples, "error": None})
 
 
 @app.post("/review", response_class=HTMLResponse)
@@ -144,11 +145,7 @@ def review(request: Request, url: str = Form(...)):
         index = EXAMPLES / "index.json"
         if index.exists():
             examples = json.loads(index.read_text(encoding="utf-8"))[:3]
-        return templates.TemplateResponse(
-            "home.html",
-            {"request": request, "examples": examples, "error": str(exc)},
-            status_code=400,
-        )
+        return _html(request, "home.html", {"examples": examples, "error": str(exc)}, 400)
     try:
         pull = fetch_pull(ref, use_cache=True)
     except GithubError as exc:
@@ -159,10 +156,11 @@ def review(request: Request, url: str = Form(...)):
         extra = ""
         if exc.status == 404:
             extra = " Paste a public URL. Private repos are out of scope for v0."
-        return templates.TemplateResponse(
+        return _html(
+            request,
             "home.html",
-            {"request": request, "examples": examples, "error": str(exc) + extra},
-            status_code=400,
+            {"examples": examples, "error": str(exc) + extra},
+            400,
         )
 
     signals, hits, det_verdict, _ = decide_deterministic(pull)
@@ -185,26 +183,22 @@ def review(request: Request, url: str = Form(...)):
 def show_run(request: Request, run_id: str):
     path = RUNS / f"{run_id}.json"
     if not path.exists():
-        return templates.TemplateResponse(
-            "home.html",
-            {"request": request, "examples": [], "error": "Unknown review id."},
-            status_code=404,
-        )
+        return _html(request, "home.html", {"examples": [], "error": "Unknown review id."}, 404)
     payload = json.loads(path.read_text(encoding="utf-8"))
-    return templates.TemplateResponse("verdict.html", {"request": request, "d": payload["view"]})
+    return _html(request, "verdict.html", {"d": payload["view"]})
 
 
 @app.get("/policy", response_class=HTMLResponse)
 def policy_page(request: Request):
     text = POLICY_MD.read_text(encoding="utf-8")
-    return templates.TemplateResponse("policy.html", {"request": request, "policy": text})
+    return _html(request, "policy.html", {"policy": text})
 
 
 @app.get("/examples", response_class=HTMLResponse)
 def examples_page(request: Request):
     index = EXAMPLES / "index.json"
     items = json.loads(index.read_text(encoding="utf-8")) if index.exists() else []
-    return templates.TemplateResponse("examples.html", {"request": request, "items": items})
+    return _html(request, "examples.html", {"items": items})
 
 
 @app.get("/eval", response_class=HTMLResponse)
@@ -212,7 +206,7 @@ def eval_page(request: Request):
     data = None
     if LAST_EVAL.exists():
         data = json.loads(LAST_EVAL.read_text(encoding="utf-8"))
-    return templates.TemplateResponse("eval.html", {"request": request, "data": data})
+    return _html(request, "eval.html", {"data": data})
 
 
 @app.get("/health")
